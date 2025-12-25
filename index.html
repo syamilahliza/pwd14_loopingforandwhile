@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form Input Nilai Angka</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: white;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #66ea7c;
+            margin-bottom: 30px;
+            font-size: 28px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        input[type="number"] {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        input[type="number"]:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        button {
+            width: 100%;
+            padding: 14px;
+            background: rgb(70, 216, 57);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .result {
+            margin-top: 30px;
+            padding: 20px;
+            border-radius: 8px;
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .result.show {
+            display: block;
+        }
+
+        .result-TI {
+            background: #e3f2fd;
+            border-left: 4px solid #21f333;
+        }
+
+        .result-Unindra {
+            background: #f3e5f5;
+            border-left: 4px solid #30b027;
+        }
+
+        .result-WEB {
+            background: #e8f5e9;
+            border-left: 4px solid #4caf50;
+        }
+
+        .result h2 {
+            margin-bottom: 10px;
+            font-size: 20px;
+        }
+
+        .result p {
+            color: #555;
+            line-height: 1.6;
+        }
+
+        .info {
+            background: #e8ffe0;
+            border-left: 4px solid #7bff00;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+        }
+
+        .info h3 {
+            color: #000000;
+            margin-bottom: 8px;
+            font-size: 16px;
+        }
+
+        .info ul {
+            margin-left: 20px;
+            color: #555;
+            font-size: 14px;
+        }
+
+        .info li {
+            margin-bottom: 5px;
+        }
+
+        footer {
+                text-align: center;
+                padding: 10px 0;
+                margin-top: 20px;
+                font-size: 14px;
+                color: #666;
+                opacity: 45%;
+
+            }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Form Input Nilai Angka</h1>
+        
+        <div class="info">
+            <h3>Ketentuan Penilaian:</h3>
+            <ul>
+                <li>Nilai habis dibagi 3 → <strong>TI</strong></li>
+                <li>Nilai habis dibagi 5 → <strong>Unindra</strong></li>
+                <li>Nilai habis dibagi 15 → <strong>WEB</strong></li>
+            </ul>
+        </div>
+
+        <form id="nilaiForm">
+            <div class="form-group">
+                <label for="nilaiAngka">Masukkan Nilai Angka:</label>
+                <input 
+                    type="number" 
+                    id="nilaiAngka" 
+                    name="nilaiAngka" 
+                    placeholder="Contoh: 15" 
+                    required
+                    min="0"
+                >
+            </div>
+            <button type="submit">Cek Hasil</button>
+        </form>
+
+        <div id="result" class="result"></div>
+
+        <footer>
+            <p>Pemrograman Web Dasar Pertemuan 14 - R3F 202433500301 Syamilah Aprilliza</p>
+        </footer>
+    </div>
+
+<script>
+        const form = document.getElementById('nilaiForm');
+        const resultDiv = document.getElementById('result');
+
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const nilaiAngka = parseInt(document.getElementById('nilaiAngka').value);
+            
+            if (isNaN(nilaiAngka)) {
+                alert('Mohon masukkan nilai yang valid!');
+                return;
+            }
+
+            let hasil = '';
+            let kelas = '';
+            let penjelasan = '';
+
+            // Gunakan looping untuk mengecek hasil
+            for (let i = 1; i <= nilaiAngka; i++) {
+                if (i === nilaiAngka) {
+                    // Cek kondisi menggunakan looping
+                    let count15 = 0;
+                    let count5 = 0;
+                    let count3 = 0;
+                    
+                    // Hitung berapa kali bisa dibagi 15
+                    let temp = nilaiAngka;
+                    while (temp > 0 && temp % 15 === 0) {
+                        count15++;
+                        temp = temp / 15;
+                    }
+                    
+                    // Hitung berapa kali bisa dibagi 5
+                    temp = nilaiAngka;
+                    while (temp > 0 && temp % 5 === 0) {
+                        count5++;
+                        temp = temp / 5;
+                    }
+                    
+                    // Hitung berapa kali bisa dibagi 3
+                    temp = nilaiAngka;
+                    while (temp > 0 && temp % 3 === 0) {
+                        count3++;
+                        temp = temp / 3;
+                    }
+                    
+                    // Tentukan hasil berdasarkan prioritas
+                    if (count15 > 0) {
+                        hasil = 'WEB';
+                        kelas = 'result-WEB';
+                        penjelasan = 'Nilai habis dibagi 15 (3 dan 5)';
+                    } else {
+                        // Cek dengan looping for
+                        for (let j = 5; j <= 5; j++) {
+                            if (count5 > 0) {
+                                hasil = 'Unindra';
+                                kelas = 'result-Unindra';
+                                penjelasan = 'Nilai habis dibagi 5';
+                                break;
+                            }
+                        }
+                        
+                        // Jika belum dapat hasil, cek dibagi 3
+                        if (hasil === '') {
+                            for (let k = 3; k <= 3; k++) {
+                                if (count3 > 0) {
+                                    hasil = 'TI';
+                                    kelas = 'result-TI';
+                                    penjelasan = 'Nilai habis dibagi 3';
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                    
+                    // Jika tidak memenuhi ketentuan
+                    if (hasil === '') {
+                        hasil = 'Tidak memenuhi ketentuan';
+                        penjelasan = 'Nilai tidak habis dibagi 3, 5, atau 15';
+                    }
+                }
+            }
+
+            // Tampilkan hasil
+            resultDiv.className = 'result show ' + kelas;
+            resultDiv.innerHTML = `
+                <h2>Hasil Pengulangan:</h2>
+                <p><strong>Nilai Angka:</strong> ${nilaiAngka}</p>
+                <p><strong>Hasil:</strong> ${hasil}</p>
+                <p><strong>Penjelasan:</strong> ${penjelasan}</p>
+            `;
+        });
+    </script>
+</body>
+</html>
